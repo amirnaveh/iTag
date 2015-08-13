@@ -1,17 +1,32 @@
 package com.amirnaveh.itag;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 
-public class iTag extends ActionBarActivity {
+public class iTag extends Activity{
+
+    private Button searchBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_i_tag);
+        searchBtn = (Button)findViewById(R.id.srchBtn);
+        searchBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("com.amirnaveh.itag.GridViewActivity");
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -35,4 +50,5 @@ public class iTag extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
