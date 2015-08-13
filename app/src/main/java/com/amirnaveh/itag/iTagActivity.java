@@ -11,7 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 
-public class iTag extends Activity{
+public class iTagActivity extends Activity{
 
     private Button searchBtn;
 
