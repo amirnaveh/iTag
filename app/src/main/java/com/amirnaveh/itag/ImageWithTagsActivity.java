@@ -11,22 +11,21 @@ import java.util.ArrayList;
 /**
  * Created by Mattan on 01/09/2015.
  */
-public class ImageWithTagsActivity extends AppCompatActivity{
+public class ImageWithTagsActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_with_tags);
 
         String title = getIntent().getStringExtra("title");
-        ArrayList tags = getIntent().getStringArrayListExtra("tags");
         Bitmap bitmap = getIntent().getParcelableExtra("image");
 
-        TextView titleTxtView = (TextView)findViewById(R.id.title);
-        titleTxtView.setText(title);
+        TextView titleTextView = (TextView) findViewById(R.id.title);
+        titleTextView.setText(title);
 
-        ImageView imgView = (ImageView)findViewById(R.id.image);
-        imgView.setImageBitmap(bitmap);
+        ImageView imageView = (ImageView) findViewById(R.id.image);
+        imageView.setImageBitmap(bitmap);
     }
 
 }

@@ -34,12 +34,12 @@ public class GridViewActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 ImageItem item = (ImageItem) parent.getItemAtPosition(position);
 
-                Intent intent = new Intent(GridViewActivity.this, ImageWithTagsActivity.class);
+                Intent intent = new Intent("com.amirnaveh.itag.ImageWithTagsActivity");
                 intent.putExtra("title", item.getTitle());
                 intent.putExtra("image", item.getImage());
-                intent.putStringArrayListExtra("tags", item.getTags());
+//                intent.putStringArrayListExtra("tags", item.getTags());
 
-                startActivity(intent);
+                GridViewActivity.this.startActivity(intent);
             }
         });
     }
