@@ -16,7 +16,7 @@ public class ImageItem {
         super();
         this.image = image;
         this.title = title;
-        this.tags = new ArrayList<>();
+        this.tags = new ArrayList();
     }
 
     public void addTag(String tag){

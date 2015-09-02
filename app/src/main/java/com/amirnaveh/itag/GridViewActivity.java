@@ -37,7 +37,7 @@ public class GridViewActivity extends Activity {
                 Intent intent = new Intent("com.amirnaveh.itag.ImageWithTagsActivity");
                 intent.putExtra("title", item.getTitle());
                 intent.putExtra("image", item.getImage());
-//                intent.putStringArrayListExtra("tags", item.getTags());
+                intent.putStringArrayListExtra("tags", item.getTags());
 
                 GridViewActivity.this.startActivity(intent);
             }

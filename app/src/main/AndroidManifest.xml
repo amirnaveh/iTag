@@ -40,6 +40,18 @@
             </intent-filter>
 
         </activity>
+
+        <activity
+            android:theme="@android:style/Theme.Dialog"
+            android:name=".AddTagActivity"
+            android:label="AddTagActivity"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="com.amirnaveh.itag.AddTagActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>
