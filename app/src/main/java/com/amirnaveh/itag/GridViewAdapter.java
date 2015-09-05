@@ -29,7 +29,7 @@ public class GridViewAdapter extends ArrayAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent){
         View row = convertView;
-        ViewHolder holder = null;
+        ViewHolder holder;
 
         if (row == null){
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();

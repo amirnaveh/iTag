@@ -17,21 +17,32 @@ import java.util.ArrayList;
  */
 public class ImageWithTagsActivity extends AppCompatActivity {
 
+    private GridView gridViewTags;
+    private TagGridViewAdapter tagGridViewAdapter;
+    private ArrayList data;
+    private int widestColumn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_with_tags);
 
+        gridViewTags = (GridView) findViewById(R.id.tags_grid_view);
+        tagGridViewAdapter = new TagGridViewAdapter(this, R.layout.tag_grid_view_item, getData());
+        gridViewTags.setAdapter(tagGridViewAdapter);
+
         String title = getIntent().getStringExtra("title");
         Bitmap bitmap = getIntent().getParcelableExtra("image");
-
-        GridView titleTextView = (GridView) findViewById(R.id.tags);
-//        titleTextView.; //TODO
 
         ImageView imageView = (ImageView) findViewById(R.id.image);
         imageView.setImageBitmap(bitmap);
 
-        ArrayList tags = getIntent().getStringArrayListExtra("tags");
+        if (tagGridViewAdapter.getData().isEmpty()){
+            gridViewTags.setVisibility(View.GONE);
+        }
+        else {
+            gridViewTags.setVisibility(View.VISIBLE);
+        }
+
 
 //        if(tags.isEmpty()){
 //            titleTextView.setVisibility(View.INVISIBLE);
@@ -48,4 +59,8 @@ public class ImageWithTagsActivity extends AppCompatActivity {
         });
     }
 
+    public ArrayList getData() {
+        final ArrayList tags = getIntent().getExtras().getStringArrayList("tags");
+        return tags;
+    }
 }

@@ -13,15 +13,18 @@
         android:scaleType="fitCenter" />
 
     <GridView
-        android:id="@+id/tags"
-        android:layout_width="match_parent"
+        android:id="@+id/tags_grid_view"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:layout_marginBottom="40dp"
         android:background="#00000c"
         android:padding="10dp"
         android:textColor="#fff"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:clickable="true"/>
     
     <Button
         android:id="@+id/add_tag_button"

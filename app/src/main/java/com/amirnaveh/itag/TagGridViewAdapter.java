@@ -29,10 +29,11 @@ public class TagGridViewAdapter extends ArrayAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent){
         View row = convertView;
-        ViewHolder holder = null;
+        ViewHolder holder;
         if( null == row){
             LayoutInflater inflater = ((Activity)context ).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
+
             holder = new ViewHolder();
             holder.txtViewTag = (TextView) row.findViewById(R.id.text_tag_item);
             row.setTag(holder);
@@ -41,29 +42,17 @@ public class TagGridViewAdapter extends ArrayAdapter {
             holder = (ViewHolder) row.getTag();
         }
 
-        TagItem tagItem = (TagItem)data.get(position);
-        holder.txtViewTag.setText(tagItem.getTag());
+        String tag = (String)data.get(position);
+        holder.txtViewTag.setText(tag);
 
         return row;
     }
 
-    static class ViewHolder{
-        TextView txtViewTag;
+    public ArrayList getData() {
+        return this.data;
     }
 
-    public class TagItem {
-        private String tag;
-
-        public TagItem(String tag){
-            this.tag = tag;
-        }
-
-        public void setTag(String tag){
-            this.tag = tag;
-        }
-
-        public String getTag(){
-            return tag;
-        }
+    static class ViewHolder{
+        TextView txtViewTag;
     }
 }

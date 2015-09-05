@@ -33,7 +33,8 @@ public class GridViewActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 ImageItem item = (ImageItem) parent.getItemAtPosition(position);
-
+                item.addTag("RAF");
+                item.addTag("ggg");
                 Intent intent = new Intent("com.amirnaveh.itag.ImageWithTagsActivity");
                 intent.putExtra("title", item.getTitle());
                 intent.putExtra("image", item.getImage());

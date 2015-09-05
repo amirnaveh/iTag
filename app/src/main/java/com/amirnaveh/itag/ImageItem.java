@@ -27,7 +27,7 @@ public class ImageItem {
         tags.remove(tag);
     }
 
-    public ArrayList getTags(){
+    public ArrayList <String> getTags(){
         return tags;
     }
 
