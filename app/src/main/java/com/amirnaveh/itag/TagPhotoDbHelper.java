@@ -12,6 +12,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import java.util.ArrayList;
+
 /**
  * This class is a helper class for handling the DB for the To-Do List Manager app
  */
@@ -90,7 +92,7 @@ public class TagPhotoDbHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAllData() {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT * from " + TABLE_NAME, null);
 
         db.close();
@@ -130,6 +132,34 @@ public class TagPhotoDbHelper extends SQLiteOpenHelper {
         db.close();
 
         return (rowsAffected == 1);
+    }
+
+    /**
+     * This method returns the tags for a specific file
+     *
+     * @param fileName - The file to find the tags for
+     * @return a String array of all the tags for the specific file
+     */
+    public String[] getTags(String fileName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor row = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL2 + " = ?",
+                new String[]{fileName});
+
+        ArrayList<String> keyArray = new ArrayList<>();
+
+        if (row.getCount() == 0) {
+            return null;
+        }
+
+        while (row.moveToNext()) { // TODO fix ALL variable names where necessary (fixed values)
+            for (int i = 2; i < 12 && (!row.getString(i).isEmpty()); i++) { // TODO notice variables here as well
+                keyArray.add(row.getString(i));
+            }
+        }
+
+        return (String[]) keyArray.toArray();
+
     }
 
 }

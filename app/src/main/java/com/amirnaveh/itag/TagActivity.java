@@ -71,20 +71,20 @@ public class TagActivity extends Activity {
                     return;
                 }
 
-                // TODO Currently it shows textual information of the photo, needs to change to gallery view
+
                 StringBuilder builder = new StringBuilder();
                 while (res.moveToNext()) { // TODO fix ALL variable names where necessary (fixed values)
                     String name = "File name: " + res.getString(1) + "\n";
                     builder.append(name);
-                    for (int i = 2; i < 12 && (!res.getString(2).isEmpty()); i++) { // TODO notice variables here as well
+                    for (int i = 2; i < 12 && (!res.getString(i).isEmpty()); i++) { // TODO notice variables here as well
                         String keywordToAdd = "#" + res.getString(i) + ", ";
                         builder.append(keywordToAdd);
                     }
                 }
 
+                // TODO Currently it shows textual information of the photo, needs to change to gallery view
                 showMessage("Data", builder.toString());
 
-                // Show all data TODO can remove(?)
 
             }
         });
