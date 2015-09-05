@@ -8,12 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 /**
  * Created by Mattan on 01/09/2015.
+ *
  */
 public class ImageWithTagsActivity extends AppCompatActivity {
 
@@ -26,7 +26,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
         Bitmap bitmap = getIntent().getParcelableExtra("image");
 
         GridView titleTextView = (GridView) findViewById(R.id.tags);
-        titleTextView.;
+//        titleTextView.; //TODO
 
         ImageView imageView = (ImageView) findViewById(R.id.image);
         imageView.setImageBitmap(bitmap);
