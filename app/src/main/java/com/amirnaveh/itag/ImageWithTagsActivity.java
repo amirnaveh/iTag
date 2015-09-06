@@ -92,4 +92,10 @@ public class ImageWithTagsActivity extends AppCompatActivity {
         final ArrayList tags = getIntent().getExtras().getStringArrayList("tags");
         return tags;
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+//            TagActivity.db.
+        }
+    }
 }
