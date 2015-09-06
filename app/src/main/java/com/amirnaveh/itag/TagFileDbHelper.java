@@ -30,17 +30,21 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
     //    private static final String COL3 = "path"; // file path
     private static final String COL3 = "keywords";
 
-    private static boolean imagesLoaded = false;
+    private static final String SELECT_ALL = "SELECT * FROM " + TABLE_NAME;
 
     public TagFileDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
-        if (!imagesLoaded){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor mCursor = db.rawQuery(SELECT_ALL, null);
+
+        if (!mCursor.moveToFirst()){
             addFilesToDb(findPhotos(context));
-            imagesLoaded = true;
+//            addFilesToDb(findVideos(context)); TODO addVideosToDb
+//            adFilesToDb(findFiles(context)); TODO addFilesToDb
         }
-//        addFilesToDb(findVideos(context)); TODO addVideosToDb
-//        addFilesToDb(findFiles(context)); TODO addFilesToDb
+
 
     }
 
@@ -59,7 +63,6 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        imagesLoaded = true;
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME); // Drop older table if existed
         onCreate(db); // Create tables again
 
@@ -127,7 +130,7 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
 
     public String[] getAllFiles() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        Cursor res = db.rawQuery(SELECT_ALL, null);
         int numFiles = res.getCount();
 
         if (numFiles == 0) {
