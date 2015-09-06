@@ -14,14 +14,14 @@ public class TagActivity extends Activity {
 
     private Button btnSearch;
     private Button btnViewAll;
-    protected TagFileDbHelper db;
+    protected TagFileDb db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_i_tag);
 
-        db = new TagFileDbHelper(this);
+        db = new TagFileDb(this);
 
         btnSearch = (Button) findViewById(R.id.button_search);
         btnViewAll = (Button) findViewById(R.id.button_viewAll);
