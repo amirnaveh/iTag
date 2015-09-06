@@ -56,6 +56,16 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
 
     }
 
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        imagesLoaded = true;
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME); // Drop older table if existed
+        onCreate(db); // Create tables again
+
+    }
+
+
     private String[] findPhotos(Context context) {
         final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
         final String orderBy = MediaStore.Images.Media._ID;
@@ -96,13 +106,6 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
 
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME); // Drop older table if existed
-        onCreate(db); // Create tables again
-
-    }
 
 //    TODO REMOVE IF INDEED UNNECESSARY
 //    public long addTags(String fileName, String keywords) {
