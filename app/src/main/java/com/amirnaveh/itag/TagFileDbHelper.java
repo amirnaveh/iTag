@@ -75,8 +75,19 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
 
     }
 
-    private void addImagesToDb(String[] photos) {
+    private void addImagesToDb(String[] files) {
 
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        for (String file : files) {
+            values.put(COL2, file); // Add the file path
+            values.put(COL3, ""); // Add empty keyword
+            db.insert(TABLE_NAME, null, values); // Inserting row to db, getting the row id
+        }
+
+        db.close(); // Closing database connection
 
     }
 
@@ -108,7 +119,7 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
 
     public String[] getAllFiles() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * from " + TABLE_NAME, null);
+        Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
         int numFiles = res.getCount();
 
         if (numFiles == 0) {
