@@ -30,10 +30,15 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
     //    private static final String COL3 = "path"; // file path
     private static final String COL3 = "keywords";
 
+    private static boolean imagesLoaded = false;
+
     public TagFileDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
-        addFilesToDb(findPhotos(context));
+        if (!imagesLoaded){
+            addFilesToDb(findPhotos(context));
+            imagesLoaded = true;
+        }
 //        addFilesToDb(findVideos(context)); TODO addVideosToDb
 //        addFilesToDb(findFiles(context)); TODO addFilesToDb
 
