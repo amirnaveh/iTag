@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.provider.MediaStore;
 
 import java.util.ArrayList;
 
@@ -31,6 +32,11 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
 
     public TagFileDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+        addImagesToDb(findPhotos(context));
+//        addVideosToDb(findVideos()); TODO addVideosToDb
+//        addFilesToDb(findFiles()); TODO addFilesToDb
+
     }
 
     @Override
@@ -43,18 +49,33 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
 
         db.execSQL(sql);
 
+    }
 
-        addImagesToDb(findPhotos());
-//        addVideosToDb(findVideos()); TODO addVideosToDb
-//        addFilesToDb(findFiles()); TODO addFilesToDb
+    private String[] findPhotos(Context context) {
+        final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
+        final String orderBy = MediaStore.Images.Media._ID;
+        //Stores all the images from the gallery in Cursor
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
+                null, orderBy);
+        //Total number of images
+        int count = cursor.getCount();
+
+        //Create an array to store path to all the images
+        String[] arrPath = new String[count];
+
+        for (int i = 0; i < count; i++) {
+            cursor.moveToPosition(i);
+            int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            //Store the path of the image
+            arrPath[i]= cursor.getString(dataColumnIndex);
+        }
+
+        return arrPath;
 
     }
 
-    private ArrayList<String> findPhotos() {
-        return null;
-    }
-
-    private void addImagesToDb(ArrayList<String> photos) {
+    private void addImagesToDb(String[] photos) {
 
 
     }
@@ -85,13 +106,25 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
 //
 //    }
 
-    public Cursor getAllData() {
+    public String[] getAllFiles() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT * from " + TABLE_NAME, null);
+        int numFiles = res.getCount();
+
+        if (numFiles == 0) {
+            return null;
+        }
+
+        String[] paths = new String[numFiles];
+
+        for (int i=0; i<numFiles && res.moveToNext(); i++) {
+            paths[i] = res.getString(2); // TODO fix a variable name instead of 1
+        }
 
         db.close();
+        res.close();
 
-        return res;
+        return paths;
     }
 
     /**
