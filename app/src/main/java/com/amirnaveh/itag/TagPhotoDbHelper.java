@@ -146,7 +146,7 @@ public class TagPhotoDbHelper extends SQLiteOpenHelper {
         Cursor row = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL2 + " = ?",
                 new String[]{fileName});
 
-        ArrayList<String> keyArray = new ArrayList<>();
+        ArrayList<String> keyArray = new ArrayList();
 
         if (row.getCount() == 0) {
             return null;
