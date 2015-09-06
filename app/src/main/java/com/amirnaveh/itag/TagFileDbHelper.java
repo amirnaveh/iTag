@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * This class is a helper class for handling the DB for the To-Do List Manager app
  */
-public class TagPhotoDbHelper extends SQLiteOpenHelper {
+public class TagFileDbHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
 
@@ -29,7 +29,7 @@ public class TagPhotoDbHelper extends SQLiteOpenHelper {
     //    private static final String COL3 = "path"; // file path
     private static final String COL3 = "keywords";
 
-    public TagPhotoDbHelper(Context context) {
+    public TagFileDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -41,8 +41,21 @@ public class TagPhotoDbHelper extends SQLiteOpenHelper {
                 COL2 + " TEXT, " +
                 COL3 + " TEXT)";
 
-
         db.execSQL(sql);
+
+
+        addImagesToDb(findPhotos());
+//        addVideosToDb(findVideos()); TODO addVideosToDb
+//        addFilesToDb(findFiles()); TODO addFilesToDb
+
+    }
+
+    private ArrayList<String> findPhotos() {
+        return null;
+    }
+
+    private void addImagesToDb(ArrayList<String> photos) {
+
 
     }
 
@@ -155,6 +168,7 @@ public class TagPhotoDbHelper extends SQLiteOpenHelper {
         }
 
         db.close();
+        row.close();
 
         return files;
 
