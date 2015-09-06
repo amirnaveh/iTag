@@ -33,9 +33,9 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
     public TagFileDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
-        addImagesToDb(findPhotos(context));
-//        addVideosToDb(findVideos()); TODO addVideosToDb
-//        addFilesToDb(findFiles()); TODO addFilesToDb
+        addFilesToDb(findPhotos(context));
+//        addFilesToDb(findVideos(context)); TODO addVideosToDb
+//        addFilesToDb(findFiles(context)); TODO addFilesToDb
 
     }
 
@@ -75,7 +75,7 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
 
     }
 
-    private void addImagesToDb(String[] files) {
+    private void addFilesToDb(String[] files) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
