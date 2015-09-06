@@ -129,7 +129,7 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
         String[] paths = new String[numFiles];
 
         for (int i=0; i<numFiles && res.moveToNext(); i++) {
-            paths[i] = res.getString(2); // TODO fix a variable name instead of 1
+            paths[i] = res.getString(1); // TODO fix a variable name instead of 1
         }
 
         db.close();

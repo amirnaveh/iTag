@@ -14,7 +14,7 @@ public class TagActivity extends Activity {
 
     private Button btnSearch;
     private Button btnViewAll;
-    protected static TagFileDbHelper db;
+    protected TagFileDbHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
