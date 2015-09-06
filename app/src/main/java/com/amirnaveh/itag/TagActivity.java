@@ -25,7 +25,7 @@ public class TagActivity extends Activity {
 
         btnSearch = (Button) findViewById(R.id.button_search);
         btnViewAll = (Button) findViewById(R.id.button_viewAll);
-
+        db.getAllFiles();
         this.search();
     }
 
