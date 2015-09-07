@@ -18,8 +18,11 @@ public class TagFileDb {
     private TagFileDbHelper dbHelper;
 
     private static final String SELECT_ALL = "SELECT * FROM " + TagFileDbHelper.TABLE_NAME;
+    private static final int PATH_INDEX_DB = 1;
+    private static final int TAGS_INDEX_DB = 2;
 
-    public TagFileDb (Context context) {
+
+    public TagFileDb(Context context) {
         this.dbHelper = new TagFileDbHelper(context);
         openRead();
         Cursor mCursor = db.rawQuery(SELECT_ALL, null);
@@ -47,7 +50,7 @@ public class TagFileDb {
 
 
     private String[] findPhotos(Context context) {
-        final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
+        final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID};
         final String orderBy = MediaStore.Images.Media._ID;
         //Stores all the images from the gallery in Cursor
         Cursor cursor = context.getContentResolver().query(
@@ -63,7 +66,7 @@ public class TagFileDb {
             cursor.moveToPosition(i);
             int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
             //Store the path of the image
-            arrPath[i]= cursor.getString(dataColumnIndex);
+            arrPath[i] = cursor.getString(dataColumnIndex);
         }
 
         return arrPath;
@@ -98,8 +101,8 @@ public class TagFileDb {
 
         String[] paths = new String[numFiles];
 
-        for (int i=0; i<numFiles && res.moveToNext(); i++) {
-            paths[i] = res.getString(1); // TODO fix a variable name instead of 1
+        for (int i = 0; i < numFiles && res.moveToNext(); i++) {
+            paths[i] = res.getString(PATH_INDEX_DB);
         }
 
         close();
@@ -144,6 +147,7 @@ public class TagFileDb {
 
     /**
      * This method returns the tags for a specific file
+     *
      * @param fileName - The file to find the tags for
      * @return a String array of all the tags for the specific file
      */
@@ -151,7 +155,7 @@ public class TagFileDb {
         openRead();
 
         Cursor row = db.rawQuery("SELECT * FROM " + TagFileDbHelper.TABLE_NAME +
-                        " WHERE " + TagFileDbHelper.COL2 + " = ?", new String[]{fileName});
+                " WHERE " + TagFileDbHelper.COL2 + " = ?", new String[]{fileName});
 
         if (row.getCount() == 0) {
             return null;
@@ -161,12 +165,12 @@ public class TagFileDb {
 
         close();
 
-        return row.getString(2);
+        return row.getString(TAGS_INDEX_DB);
 
     }
 
 
-    public ArrayList<String> getFilesWithTag (String[] keywords) {
+    public ArrayList<String> getFilesWithTag(String[] keywords) {
         openRead();
 
         String sql = "SELECT * FROM " + TagFileDbHelper.TABLE_NAME +
@@ -181,7 +185,7 @@ public class TagFileDb {
         ArrayList<String> files = new ArrayList<>();
 
         while (row.moveToNext()) {
-            files.add(row.getString(1));  // TODO fix variable name
+            files.add(row.getString(PATH_INDEX_DB));
         }
 
         close();
