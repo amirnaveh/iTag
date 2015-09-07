@@ -8,12 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
+
+import java.util.ArrayList;
 
 
 public class TagActivity extends Activity {
 
     private Button btnSearch;
     private Button btnViewAll;
+    private EditText editTextTagsToSearch;
     protected TagFileDb db;
 
     @Override
@@ -25,8 +29,25 @@ public class TagActivity extends Activity {
 
         btnSearch = (Button) findViewById(R.id.button_search);
         btnViewAll = (Button) findViewById(R.id.button_viewAll);
-        db.getAllFiles();
+
+        editTextTagsToSearch = (EditText)findViewById(R.id.EditText_Tags_To_Search);
+//        db.getAllFiles();
         this.search();
+        this.showAll();
+    }
+
+    private void showAll() {
+        btnViewAll.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] allFileNames = db.getAllFiles();
+
+                Intent intent = new Intent("com.amirnaveh.itag.GridViewActivity");
+                intent.putExtra("allFileNames", allFileNames);
+
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -51,15 +72,24 @@ public class TagActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void search() {
+    private void search() {
         btnSearch.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                String tagsToSearchStr = editTextTagsToSearch.getText().toString();
+                String[] tagsToSearchArr = tagsToSearchStr.split(",");
+                ArrayList fileNames = db.getFilesWithTag(tagsToSearchArr);
+
                 Intent intent = new Intent("com.amirnaveh.itag.GridViewActivity");
+                if(!fileNames.isEmpty()) {
+                    intent.putStringArrayListExtra("fileNames", fileNames);
+                }
                 startActivity(intent);
             }
         });
     }
+
+
 
 
 }

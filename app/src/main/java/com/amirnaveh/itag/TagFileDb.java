@@ -26,7 +26,7 @@ public class TagFileDb {
         this.dbHelper = new TagFileDbHelper(context);
         openRead();
         Cursor mCursor = db.rawQuery(SELECT_ALL, null);
-        close();
+//        close();
 
         if (!mCursor.moveToFirst()) {
             addFilesToDb(findPhotos(context));
