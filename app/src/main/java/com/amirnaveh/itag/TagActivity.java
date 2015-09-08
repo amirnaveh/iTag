@@ -47,7 +47,7 @@ public class TagActivity extends Activity {
                 String[] allFileNames = db.getAllFiles();
 
                 Intent intent = new Intent("com.amirnaveh.itag.GridViewActivity");
-                intent.putStringArrayListExtra("fileNames", new ArrayList<>(Arrays.asList(allFileNames)));
+                intent.putStringArrayListExtra("fileNames", new ArrayList(Arrays.asList(allFileNames)));
 
                 startActivity(intent);
             }
