@@ -29,9 +29,9 @@ public class AddTagActivity extends Activity {
                 EditText addedTags = (EditText) findViewById(R.id.edit_text_add_tag);
 
                 Intent intent = new Intent();
-                intent.putExtra("tagsToAdd", addedTags.getText());
+                intent.putExtra("tagsToAdd", addedTags.getText().toString());
 
-                setResult(RESULT_OK, intent);
+                setResult(1, intent);
                 finish();
             }
         });

@@ -37,17 +37,17 @@ public class TagFileDb {
         }
         mCursor.close();
 
-        cleanAllDeleted(context, this.getAllFiles());
+        cleanAllDeleted(this.getAllFiles());
 
         close();
 
     }
 
-    private void cleanAllDeleted(Context context, String[] allFiles) {
-        for (String allFile : allFiles) {
-            File file = context.getFileStreamPath(allFile);
+    private void cleanAllDeleted(String[] allFiles) {
+        for (String filePath : allFiles) {
+            File file = new File(filePath);
             if (!file.exists()) {
-                deleteFile(allFile);
+                deleteFileFromDb(filePath);
             }
         }
     }
@@ -166,7 +166,7 @@ public class TagFileDb {
 
     }
 
-    public boolean deleteFile(String fileName) {
+    public boolean deleteFileFromDb(String fileName) {
         open();
         int rowsAffected = db.delete(TagFileDbHelper.TABLE_NAME, "file_name = ?",
                 new String[]{fileName});

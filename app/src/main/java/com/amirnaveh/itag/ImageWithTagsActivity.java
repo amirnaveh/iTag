@@ -29,6 +29,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
     private LinearLayout linearLayoutInHorizontal;
 //    private TagGridViewAdapter tagGridViewAdapter;
     private ArrayList data;
+    private  String path;
 
 //    private int widestColumn;
     @Override
@@ -41,7 +42,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
 //        gridViewTags.setAdapter(tagGridViewAdapter);
         linearLayoutInHorizontal = (LinearLayout) findViewById(R.id.LinearLayout_In_Horizontal_Layout);
 
-        String path = getIntent().getStringExtra("path");
+        path = getIntent().getStringExtra("path");
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap bitmap = BitmapFactory.decodeFile(path, options);
@@ -53,7 +54,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
 
 
 //        linearLayout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
-        for (int i = 0; i < getData().size(); i++) {
+        for (int i = 0;getData() != null && i < getData().size(); i++) {
 
             final TextView textView = new TextView(this);
 
@@ -87,6 +88,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTagActivity.class);
+                intent.putExtra("path", path);
                 startActivityForResult(intent, 1);
             }
         });
@@ -98,9 +100,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
 
         String tagsToAdd = data.getStringExtra("tagsToAdd");
 
-        Intent intent = new Intent();
-        intent.putExtra("newTags", tagsToAdd);
-
+        tagsToAdd = tagsToAdd.replaceAll("\\s+", " ");
 //        setResult(RESULT_OK, ); TODO
 
 
