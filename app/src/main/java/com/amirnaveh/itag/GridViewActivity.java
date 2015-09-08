@@ -19,11 +19,13 @@ import java.util.ArrayList;
 public class GridViewActivity extends Activity {
     private GridView gridView;
     private GridViewAdapter gridAdapter;
-
+    private ArrayList<String> filePaths;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
+
+        filePaths = getIntent().getStringArrayListExtra("fileNames");
 
         gridView = (GridView) findViewById(R.id.gridView);
         gridAdapter = new GridViewAdapter(this, R.layout.grid_item, getData());
@@ -33,10 +35,9 @@ public class GridViewActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 ImageItem item = (ImageItem) parent.getItemAtPosition(position);
-                item.addTag("RAF");
-                item.addTag("ggg");
+
                 Intent intent = new Intent("com.amirnaveh.itag.ImageWithTagsActivity");
-                intent.putExtra("title", item.getTitle());
+                intent.putExtra("path", item.getPath());
                 intent.putExtra("image", item.getImage());
                 intent.putStringArrayListExtra("tags", item.getTags());
 
@@ -48,11 +49,14 @@ public class GridViewActivity extends Activity {
     // Prepare some dummy data for gridview
     private ArrayList<ImageItem> getData() {
         final ArrayList<ImageItem> imageItems = new ArrayList();
-        TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
-        for (int i = 0; i < imgs.length(); i++) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
-            imageItems.add(new ImageItem(bitmap, "Image#" + i));
+
+        for (String s : filePaths) {
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(s, bmOptions);
+
+            ImageItem item = new ImageItem(bitmap, s);
         }
         return imageItems;
     }
 }
+

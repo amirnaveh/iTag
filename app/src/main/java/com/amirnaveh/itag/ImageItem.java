@@ -9,13 +9,13 @@ import java.util.ArrayList;
  */
 public class ImageItem {
     private Bitmap image;
-    private String title;
+    private String imagePath;
     private ArrayList<String> tags;
 
-    public ImageItem(Bitmap image, String title) {
+    public ImageItem(Bitmap image, String path) {
         super();
         this.image = image;
-        this.title = title;
+        this.imagePath = path;
         this.tags = new ArrayList();
     }
 
@@ -39,11 +39,11 @@ public class ImageItem {
         this.image = image;
     }
 
-    public String getTitle() {
-        return title;
+    public String getPath() {
+        return imagePath;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setPath(String path) {
+        this.imagePath = path;
     }
 }
