@@ -182,7 +182,7 @@ public class TagFileDb {
             return null;
         }
 
-        ArrayList<String> files = new ArrayList<>();
+        ArrayList<String> files = new ArrayList();
 
         while (row.moveToNext()) {
             files.add(row.getString(PATH_INDEX_DB));

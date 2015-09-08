@@ -10,7 +10,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class TagActivity extends Activity {
@@ -43,7 +45,7 @@ public class TagActivity extends Activity {
                 String[] allFileNames = db.getAllFiles();
 
                 Intent intent = new Intent("com.amirnaveh.itag.GridViewActivity");
-                intent.putExtra("fileNames", allFileNames);
+                intent.putStringArrayListExtra("fileNames", new ArrayList<String>(Arrays.asList(allFileNames)));
 
                 startActivity(intent);
             }

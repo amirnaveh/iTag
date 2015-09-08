@@ -47,16 +47,8 @@ public class GridViewActivity extends Activity {
     }
 
     // Prepare some dummy data for gridview
-    private ArrayList<ImageItem> getData() {
-        final ArrayList<ImageItem> imageItems = new ArrayList();
-
-        for (String s : filePaths) {
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            Bitmap bitmap = BitmapFactory.decodeFile(s, bmOptions);
-
-            ImageItem item = new ImageItem(bitmap, s);
-        }
-        return imageItems;
+    private ArrayList<String> getData() {
+        return this.filePaths;
     }
 }
 

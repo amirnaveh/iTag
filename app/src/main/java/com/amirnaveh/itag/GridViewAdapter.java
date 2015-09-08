@@ -2,6 +2,10 @@ package com.amirnaveh.itag;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -27,7 +37,7 @@ public class GridViewAdapter extends ArrayAdapter {
         this.data = data;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         ViewHolder holder;
 
@@ -35,7 +45,7 @@ public class GridViewAdapter extends ArrayAdapter {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
-            holder.imageTitle = (TextView) row.findViewById(R.id.text);
+//            holder.imagePath = (TextView) row.findViewById(R.id.text);
             holder.image = (ImageView) row.findViewById(R.id.image);
             row.setTag(holder);
         }
@@ -43,15 +53,21 @@ public class GridViewAdapter extends ArrayAdapter {
             holder = (ViewHolder) row.getTag();
         }
 
-        ImageItem item = (ImageItem)data.get(position);
-        holder.imageTitle.setText(item.getTitle());
-        holder.image.setImageBitmap(item.getImage());
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 20;
 
+
+        Bitmap bitmap = BitmapFactory.decodeFile((String)data.get(position), options);
+
+
+        ImageItem item = new ImageItem(bitmap, (String)data.get(position));
+        holder.image.setImageBitmap(item.getImage());
+        bitmap.recycle();
         return row;
     }
 
     static class ViewHolder {
-        TextView imageTitle;
+        TextView imagePath;
         ImageView image;
     }
 }
