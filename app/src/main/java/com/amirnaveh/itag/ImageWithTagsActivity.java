@@ -2,11 +2,16 @@ package com.amirnaveh.itag;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,8 +30,6 @@ public class ImageWithTagsActivity extends AppCompatActivity {
 //    private TagGridViewAdapter tagGridViewAdapter;
     private ArrayList data;
 
-    private String file;
-
 //    private int widestColumn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +41,11 @@ public class ImageWithTagsActivity extends AppCompatActivity {
 //        gridViewTags.setAdapter(tagGridViewAdapter);
         linearLayoutInHorizontal = (LinearLayout) findViewById(R.id.LinearLayout_In_Horizontal_Layout);
 
+        String path = getIntent().getStringExtra("path");
 
-        file = getIntent().getStringExtra("title");
-        Bitmap bitmap = getIntent().getParcelableExtra("image");
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+
 
         ImageView imageView = (ImageView) findViewById(R.id.image);
         imageView.setImageBitmap(bitmap);
@@ -105,5 +110,4 @@ public class ImageWithTagsActivity extends AppCompatActivity {
         final ArrayList tags = getIntent().getExtras().getStringArrayList("tags");
         return tags;
     }
-
 }

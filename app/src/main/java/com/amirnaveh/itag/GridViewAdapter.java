@@ -59,10 +59,20 @@ public class GridViewAdapter extends ArrayAdapter {
 
         Bitmap bitmap = BitmapFactory.decodeFile((String)data.get(position), options);
 
-
+//        Bitmap compressed = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
+//        try{
+//            long time = System.currentTimeMillis();
+//            File dumpFile = new File(time + ".png");
+//            os = new FileOutputStream(dumpFile);
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 150, os);
+//        }
+//        catch (IOException ioe) {
+//            Log.e("crap", "GrayImage dump failed", ioe);
+//        }
         ImageItem item = new ImageItem(bitmap, (String)data.get(position));
+//        holder.imagePath.setText(item.getPath());
         holder.image.setImageBitmap(item.getImage());
-        bitmap.recycle();
+//        bitmap.recycle();
         return row;
     }
 

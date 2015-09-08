@@ -34,14 +34,14 @@ public class GridViewActivity extends Activity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                ImageItem item = (ImageItem) parent.getItemAtPosition(position);
+                String path = (String) parent.getItemAtPosition(position);
 
-                Intent intent = new Intent("com.amirnaveh.itag.ImageWithTagsActivity");
-                intent.putExtra("path", item.getPath());
-                intent.putExtra("image", item.getImage());
-                intent.putStringArrayListExtra("tags", item.getTags());
+                Intent intent = new Intent(GridViewActivity.this, ImageWithTagsActivity.class);
+                intent.putExtra("path", path);
 
-                GridViewActivity.this.startActivity(intent);
+//                intent.putStringArrayListExtra("tags", );
+
+                startActivity(intent);
             }
         });
     }
