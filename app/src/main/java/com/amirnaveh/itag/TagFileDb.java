@@ -133,21 +133,21 @@ public class TagFileDb {
      * This method updates the tags for the file passed as a parameter from scratch
      *
      * @param fileName - the file name
-     * @param tags - the tags for the file
+     * @param newTags - the tags for the file
      * @return true if update went successfuly, false if there was a problem and more than one row
      * was changed
      */
-    public boolean updateTags(String fileName, String tags) {
+    public boolean updateTags(String fileName, String newTags) {
         open();
 
         String currentTags = this.getTags(fileName);
-        ArrayList<String> arrayCurrentTags = new ArrayList<>(Arrays.asList(currentTags.split(TAG_SEPARATOR)));
+        ArrayList<String> arrayCurrentTags = new ArrayList(Arrays.asList(currentTags.split(TAG_SEPARATOR)));
 
-        String[] splitTags = tags.split(TAG_SEPARATOR);
+        String[] splitNewTags = newTags.split(TAG_SEPARATOR);
 
-        for (int i=0; i<splitTags.length; i++) {
-            if (!arrayCurrentTags.contains(splitTags[i])){
-                arrayCurrentTags.add(splitTags[i]);
+        for (int i=0; i<splitNewTags.length; i++) {
+            if (!arrayCurrentTags.contains(splitNewTags[i])){
+                arrayCurrentTags.add(splitNewTags[i]);
             }
         }
 
