@@ -3,14 +3,10 @@ package com.amirnaveh.itag;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +25,8 @@ public class ImageWithTagsActivity extends AppCompatActivity {
 //    private TagGridViewAdapter tagGridViewAdapter;
     private ArrayList data;
 
+    private String file;
+
 //    private int widestColumn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +38,8 @@ public class ImageWithTagsActivity extends AppCompatActivity {
 //        gridViewTags.setAdapter(tagGridViewAdapter);
         linearLayoutInHorizontal = (LinearLayout) findViewById(R.id.LinearLayout_In_Horizontal_Layout);
 
-        String title = getIntent().getStringExtra("title");
+
+        file = getIntent().getStringExtra("title");
         Bitmap bitmap = getIntent().getParcelableExtra("image");
 
         ImageView imageView = (ImageView) findViewById(R.id.image);
@@ -88,14 +87,23 @@ public class ImageWithTagsActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult (int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        String tagsToAdd = data.getStringExtra("tagsToAdd");
+
+        Intent intent = new Intent();
+        intent.putExtra("newTags", tagsToAdd);
+
+//        setResult(RESULT_OK, ); TODO
+
+
+    }
+
     public ArrayList getData() {
         final ArrayList tags = getIntent().getExtras().getStringArrayList("tags");
         return tags;
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-//            TagActivity.db.
-        }
-    }
 }

@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.MediaStore;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * This is the TagFile DB class
@@ -20,20 +22,34 @@ public class TagFileDb {
     private static final String SELECT_ALL = "SELECT * FROM " + TagFileDbHelper.TABLE_NAME;
     private static final int PATH_INDEX_DB = 1;
     private static final int TAGS_INDEX_DB = 2;
+    private static final String TAG_SEPARATOR = ",";
 
 
     public TagFileDb(Context context) {
         this.dbHelper = new TagFileDbHelper(context);
-        openRead();
-        Cursor mCursor = db.rawQuery(SELECT_ALL, null);
-//        close();
+        open();
 
+        Cursor mCursor = db.rawQuery(SELECT_ALL, null);
         if (!mCursor.moveToFirst()) {
             addFilesToDb(findPhotos(context));
 //            addFilesToDb(findVideos(context)); TODO addVideosToDb
 //            adFilesToDb(findFiles(context)); TODO addFilesToDb
         }
+        mCursor.close();
 
+        cleanAllDeleted(context, this.getAllFiles());
+
+        close();
+
+    }
+
+    private void cleanAllDeleted(Context context, String[] allFiles) {
+        for (String allFile : allFiles) {
+            File file = context.getFileStreamPath(allFile);
+            if (!file.exists()) {
+                deleteFile(allFile);
+            }
+        }
     }
 
     public void open() {
@@ -69,6 +85,8 @@ public class TagFileDb {
             arrPath[i] = cursor.getString(dataColumnIndex);
         }
 
+        cursor.close();
+
         return arrPath;
 
     }
@@ -81,7 +99,7 @@ public class TagFileDb {
 
         for (String file : files) {
             values.put(TagFileDbHelper.COL2, file); // Add the file path
-            values.put(TagFileDbHelper.COL3, ""); // Add empty keyword
+            values.put(TagFileDbHelper.COL3, ""); // Add empty tag
             db.insert(TagFileDbHelper.TABLE_NAME, null, values); // Inserting row to db, getting the row id
         }
 
@@ -112,19 +130,32 @@ public class TagFileDb {
     }
 
     /**
-     * This method updates the keywords for the file passed as a parameter from scratch
+     * This method updates the tags for the file passed as a parameter from scratch
      *
      * @param fileName - the file name
-     * @param keywords - the keywords for the file
+     * @param tags - the tags for the file
      * @return true if update went successfuly, false if there was a problem and more than one row
      * was changed
      */
-    public boolean updateTags(String fileName, String keywords) {
+    public boolean updateTags(String fileName, String tags) {
         open();
 
+        String currentTags = this.getTags(fileName);
+        ArrayList<String> arrayCurrentTags = new ArrayList<>(Arrays.asList(currentTags.split(TAG_SEPARATOR)));
+
+        String[] splitTags = tags.split(TAG_SEPARATOR);
+
+        for (int i=0; i<splitTags.length; i++) {
+            if (!arrayCurrentTags.contains(splitTags[i])){
+                arrayCurrentTags.add(splitTags[i]);
+            }
+        }
+
+        String updatedTags = arrayCurrentTags.toString().replaceAll(" ","");
+
         ContentValues values = new ContentValues();
-        values.put(TagFileDbHelper.COL2, fileName); // task name
-        values.put(TagFileDbHelper.COL3, keywords);
+        values.put(TagFileDbHelper.COL2, fileName); // file name
+        values.put(TagFileDbHelper.COL3, updatedTags); // file tags
 
         int rowsAffected = db.update(TagFileDbHelper.TABLE_NAME, values, "file_name = ?",
                 new String[]{fileName});
@@ -146,7 +177,7 @@ public class TagFileDb {
     }
 
     /**
-     * This method returns the tags for a specific file
+     * This method returns the tags for a specific file in a string
      *
      * @param fileName - The file to find the tags for
      * @return a String array of all the tags for the specific file
@@ -162,30 +193,34 @@ public class TagFileDb {
         }
 
         row.moveToNext();
+        String tags = row.getString(TAGS_INDEX_DB);
 
+        row.close();
         close();
 
-        return row.getString(TAGS_INDEX_DB);
+        return tags;
 
     }
 
 
-    public ArrayList<String> getFilesWithTag(String[] keywords) {
+    public String[] getFilesWithTag(String[] tags) {
         openRead();
 
         String sql = "SELECT * FROM " + TagFileDbHelper.TABLE_NAME +
                 " WHERE " + TagFileDbHelper.COL3 + " = ?";
 
-        Cursor row = db.rawQuery(sql, keywords);
+        Cursor row = db.rawQuery(sql, tags);
 
-        if (row.getCount() == 0) {
+        int numOfFiles = row.getCount();
+
+        if (numOfFiles == 0) {
             return null;
         }
 
-        ArrayList<String> files = new ArrayList();
+        String[] files = new String[numOfFiles];
 
-        while (row.moveToNext()) {
-            files.add(row.getString(PATH_INDEX_DB));
+        for (int i=0; i<numOfFiles && row.moveToNext(); i++) {
+            files[i]=row.getString(PATH_INDEX_DB);
         }
 
         close();

@@ -2,7 +2,7 @@ package com.amirnaveh.itag;
 
 /**
  * Tag Photo DB Helper
- * This is the helper for managing the DB of keywords for the files
+ * This is the helper for managing the DB of tags for the files
  */
 
 import android.content.Context;
@@ -23,7 +23,7 @@ public class TagFileDbHelper extends SQLiteOpenHelper {
     protected static final String COL1 = BaseColumns._ID;
     protected static final String COL2 = "file_name"; // full file name (including path)
     //    private static final String COL3 = "path"; // file path
-    protected static final String COL3 = "keywords";
+    protected static final String COL3 = "tags";
 
     public TagFileDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

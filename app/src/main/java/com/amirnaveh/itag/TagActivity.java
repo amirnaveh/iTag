@@ -10,12 +10,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
 public class TagActivity extends Activity {
+
+    protected static final int RESULT_ADD_TAG = 1;
+    protected static final int RESULT_DELETE_TAG = 2;
 
     private Button btnSearch;
     private Button btnViewAll;
@@ -45,7 +47,7 @@ public class TagActivity extends Activity {
                 String[] allFileNames = db.getAllFiles();
 
                 Intent intent = new Intent("com.amirnaveh.itag.GridViewActivity");
-                intent.putStringArrayListExtra("fileNames", new ArrayList<String>(Arrays.asList(allFileNames)));
+                intent.putStringArrayListExtra("fileNames", new ArrayList<>(Arrays.asList(allFileNames)));
 
                 startActivity(intent);
             }
@@ -80,11 +82,11 @@ public class TagActivity extends Activity {
             public void onClick(View v) {
                 String tagsToSearchStr = editTextTagsToSearch.getText().toString();
                 String[] tagsToSearchArr = tagsToSearchStr.split(",");
-                ArrayList fileNames = db.getFilesWithTag(tagsToSearchArr);
+                String[] fileNames = db.getFilesWithTag(tagsToSearchArr);
 
                 Intent intent = new Intent("com.amirnaveh.itag.GridViewActivity");
-                if(!fileNames.isEmpty()) {
-                    intent.putStringArrayListExtra("fileNames", fileNames);
+                if(!(fileNames.length == 0)) {
+                    intent.putStringArrayListExtra("fileNames", new ArrayList<String>(Arrays.asList(fileNames)));
                 }
                 startActivity(intent);
             }

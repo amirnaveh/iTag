@@ -10,22 +10,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/edit_text_add_tag"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
+        android:hint="Add tags here"
+        android:layout_above="@+id/button_add"
         android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginRight="13dp"
-        android:hint="..."/>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_add"
-        android:hint="@string/add_tag"
-        android:layout_below="@+id/edit_text_add_tag"
-        android:layout_marginRight="13dp"
-        android:layout_marginLeft="13dp"/>
+        android:text="Add Tags"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/text_view_explanation"
+        android:layout_alignStart="@+id/text_view_explanation"
+        android:layout_alignRight="@+id/text_view_explanation"
+        android:layout_alignEnd="@+id/text_view_explanation" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Separate tags with space"
+        android:id="@+id/text_view_explanation"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="169dp" />
 
 </RelativeLayout>

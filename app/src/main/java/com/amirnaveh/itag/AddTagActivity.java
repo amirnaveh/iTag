@@ -8,9 +8,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 /**
+ * Tag Activity Class
  * Created by Mattan on 02/09/2015.
  */
+
+
 public class AddTagActivity extends Activity {
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -21,14 +26,18 @@ public class AddTagActivity extends Activity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText editText = (EditText) findViewById(R.id.edit_text_add_tag);
+                EditText addedTags = (EditText) findViewById(R.id.edit_text_add_tag);
 
                 Intent intent = new Intent();
-                intent.putExtra("tagToAdd", editText.getText());
+                intent.putExtra("tagsToAdd", addedTags.getText());
 
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
     }
+
+
+
+
 }
