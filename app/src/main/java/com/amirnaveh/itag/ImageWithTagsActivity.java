@@ -47,10 +47,8 @@ public class ImageWithTagsActivity extends AppCompatActivity {
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap bitmap = BitmapFactory.decodeFile(path, options);
 
-
         ImageView imageView = (ImageView) findViewById(R.id.image);
         imageView.setImageBitmap(bitmap);
-
 
 
 //        linearLayout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
