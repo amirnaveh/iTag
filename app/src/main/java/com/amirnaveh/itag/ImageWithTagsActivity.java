@@ -4,14 +4,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,7 +25,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
     private LinearLayout linearLayoutInHorizontal;
 //    private TagGridViewAdapter tagGridViewAdapter;
     private ArrayList data;
-    private  String path;
+    private String path;
 
 //    private int widestColumn;
     @Override
@@ -42,7 +38,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
 //        gridViewTags.setAdapter(tagGridViewAdapter);
         linearLayoutInHorizontal = (LinearLayout) findViewById(R.id.LinearLayout_In_Horizontal_Layout);
 
-        path = getIntent().getStringExtra("path");
+        this.path = getIntent().getStringExtra("path");
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -58,7 +54,6 @@ public class ImageWithTagsActivity extends AppCompatActivity {
         while (height/sampleSize > 4096 || width/sampleSize > 4096) {
             sampleSize *= 2;
         }
-        options = null;
         options = new BitmapFactory.Options();
         options.inSampleSize = sampleSize;
 
@@ -78,7 +73,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
             textView.setPadding(10,0,10,0);
             textView.setTag(i);
             final int j = i;
-            textView.setText("#" + (String) getData().get(i));
+            textView.setText("#" + getData().get(i));
 
 
             textView.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +87,6 @@ public class ImageWithTagsActivity extends AppCompatActivity {
         }
 
 
-
 //        if(tags.isEmpty()){
 //            titleTextView.setVisibility(View.INVISIBLE);
 //
@@ -104,7 +98,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddTagActivity.class);
                 intent.putExtra("path", path);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, Constants.ADD_TAG_REQUEST_CODE);
             }
         });
     }
@@ -113,10 +107,26 @@ public class ImageWithTagsActivity extends AppCompatActivity {
     protected void onActivityResult (int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String tagsToAdd = data.getStringExtra("tagsToAdd");
+        if (requestCode != resultCode) {
+            return;
+        }
 
-        tagsToAdd = tagsToAdd.replaceAll("\\s+", " ");
-//        setResult(RESULT_OK, ); TODO
+        TagFileDb db = TagFileDb.getInstance(this);
+
+        switch (resultCode) {
+            case Constants.ADD_TAG_REQUEST_CODE:
+                db.addTags(path, data.getExtras().getString(Constants.KEY_ADD_TAGS));
+                break;
+
+            case Constants.DELETE_TAG_REQUEST_CODE:
+                break;
+
+            case Constants.UPDATE_TAG_REQUEST_CODE:
+                break;
+
+            default:
+                break;
+        }
 
 
     }

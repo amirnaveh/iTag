@@ -29,7 +29,7 @@ public class TagActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_i_tag);
 
-        db = new TagFileDb(this);
+        this.db = TagFileDb.getInstance(this);
 
         btnSearch = (Button) findViewById(R.id.button_search);
         btnViewAll = (Button) findViewById(R.id.button_viewAll);
@@ -86,7 +86,7 @@ public class TagActivity extends Activity {
 
                 Intent intent = new Intent("com.amirnaveh.itag.GridViewActivity");
                 if(!(fileNames.length == 0)) {
-                    intent.putStringArrayListExtra("fileNames", new ArrayList<String>(Arrays.asList(fileNames)));
+                    intent.putStringArrayListExtra("fileNames", new ArrayList(Arrays.asList(fileNames)));
                 }
                 startActivity(intent);
             }

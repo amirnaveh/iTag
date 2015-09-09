@@ -15,8 +15,6 @@ import android.widget.EditText;
 
 public class AddTagActivity extends Activity {
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -29,9 +27,9 @@ public class AddTagActivity extends Activity {
                 EditText addedTags = (EditText) findViewById(R.id.edit_text_add_tag);
 
                 Intent intent = new Intent();
-                intent.putExtra("tagsToAdd", addedTags.getText().toString());
+                intent.putExtra(Constants.KEY_ADD_TAGS, addedTags.getText().toString());
 
-                setResult(1, intent);
+                setResult(Constants.ADD_TAG_REQUEST_CODE, intent);
                 finish();
             }
         });
