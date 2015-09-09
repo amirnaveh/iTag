@@ -45,6 +45,23 @@ public class ImageWithTagsActivity extends AppCompatActivity {
         path = getIntent().getStringExtra("path");
 
         BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+        int imageHeight = options.outHeight;
+        int imageWidth = options.outWidth;
+        String imageType = options.outMimeType;
+
+
+        int height = options.outHeight;
+        int width = options.outWidth;
+        int sampleSize = 1;
+        while (height/sampleSize > 4096 || width/sampleSize > 4096) {
+            sampleSize *= 2;
+        }
+        options = null;
+        options = new BitmapFactory.Options();
+        options.inSampleSize = sampleSize;
+
         Bitmap bitmap = BitmapFactory.decodeFile(path, options);
 
         ImageView imageView = (ImageView) findViewById(R.id.image);
