@@ -2,9 +2,11 @@ package com.amirnaveh.itag;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +47,6 @@ public class GridViewAdapter extends ArrayAdapter {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
-//            holder.imagePath = (TextView) row.findViewById(R.id.text);
             holder.image = (ImageView) row.findViewById(R.id.image);
             row.setTag(holder);
         }
@@ -53,31 +54,40 @@ public class GridViewAdapter extends ArrayAdapter {
             holder = (ViewHolder) row.getTag();
         }
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 20;
+        new AsyncTask<ViewHolder, String, Bitmap>() {
+            private ViewHolder v;
 
+            @Override
+            protected Bitmap doInBackground(ViewHolder... params) {
+                v = params[0];
 
-        Bitmap bitmap = BitmapFactory.decodeFile((String)data.get(position), options);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 20;
+                Bitmap bitmap = BitmapFactory.decodeFile(v.path, options);
 
-//        Bitmap compressed = Bitmap.createScaledBitmap(bitmap, 150, 150, true);
-//        try{
-//            long time = System.currentTimeMillis();
-//            File dumpFile = new File(time + ".png");
-//            os = new FileOutputStream(dumpFile);
-//            bitmap.compress(Bitmap.CompressFormat.PNG, 150, os);
-//        }
-//        catch (IOException ioe) {
-//            Log.e("crap", "GrayImage dump failed", ioe);
-//        }
-        ImageItem item = new ImageItem(bitmap, (String)data.get(position));
-//        holder.imagePath.setText(item.getPath());
-        holder.image.setImageBitmap(item.getImage());
-//        bitmap.recycle();
+                return bitmap;
+
+            }
+        }.execute(holder);
+
         return row;
     }
 
-    static class ViewHolder {
-        TextView imagePath;
-        ImageView image;
+
+
+//    private class GetImages extends AsyncTask<String, String, Bitmap > {
+//
+//        @Override
+//        protected Bitmap doInBackground(String... path) {
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inSampleSize = 20;
+//            Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+//
+//            return bitmap;
+//        }
+
+     class ViewHolder {
+        String path;
+        protected ImageView image;
     }
 }
