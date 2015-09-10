@@ -173,7 +173,7 @@ public class TagFileDb extends SQLiteOpenHelper {
         String currentTags = this.getTagsForFile(fileName);
         String updatedTags;
 
-        if (currentTags.equals("")) {
+        if (currentTags==null) {
             updatedTags = newTags;
         }
         else {

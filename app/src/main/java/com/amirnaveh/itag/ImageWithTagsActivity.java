@@ -88,7 +88,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
         linearLayoutInHorizontal.removeAllViews();
 
         String imageTags = TagFileDb.getInstance(ImageWithTagsActivity.this).getTagsForFile(path);
-        if (imageTags.equals("")) {
+        if (imageTags==null) {
             return;
         }
         String[] splitTags = imageTags.split(",");
