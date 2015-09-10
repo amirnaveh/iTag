@@ -36,7 +36,7 @@
         android:background="#00000c"
         android:paddingBottom="7dp"
         android:textColor="#fff"
-        android:text="@string/add_tag"/>
+        android:text="@string/add_tags"/>
 
     <HorizontalScrollView
         android:id="@+id/HorizontalScrollView_Tags"

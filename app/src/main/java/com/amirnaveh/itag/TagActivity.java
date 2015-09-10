@@ -1,6 +1,8 @@
 package com.amirnaveh.itag;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -76,6 +78,7 @@ public class TagActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+
     private void search() {
         btnSearch.setOnClickListener(new OnClickListener() {
             @Override
@@ -84,11 +87,22 @@ public class TagActivity extends Activity {
                 String[] tagsToSearchArr = tagsToSearchStr.split(",");
                 String[] fileNames = db.getFilesWithTag(tagsToSearchArr);
 
-                Intent intent = new Intent("com.amirnaveh.itag.GridViewActivity");
-                if(!(fileNames.length == 0)) {
-                    intent.putStringArrayListExtra("fileNames", new ArrayList(Arrays.asList(fileNames)));
+                if (fileNames == null) {
+                    new AlertDialog.Builder(TagActivity.this).setTitle("No Photos Found").setMessage("Sorry, I couldn't find any photos").
+                            setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
                 }
-                startActivity(intent);
+                else {
+                    Intent intent = new Intent("com.amirnaveh.itag.GridViewActivity");
+                    if(!(fileNames.length == 0)) {
+                        intent.putStringArrayListExtra("fileNames", new ArrayList(Arrays.asList(fileNames)));
+                    }
+                    startActivity(intent);
+                }
             }
         });
     }

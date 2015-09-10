@@ -26,8 +26,10 @@ public class AddTagActivity extends Activity {
             public void onClick(View view) {
                 EditText addedTags = (EditText) findViewById(R.id.edit_text_add_tag);
 
+                String newTags = addedTags.getText().toString();
+
                 Intent intent = new Intent();
-                intent.putExtra(Constants.KEY_ADD_TAGS, addedTags.getText().toString());
+                intent.putExtra(Constants.KEY_ADD_TAGS, newTags.replaceAll("\\s+",","));
 
                 setResult(Constants.ADD_TAG_REQUEST_CODE, intent);
                 finish();

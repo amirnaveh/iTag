@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -64,31 +66,11 @@ public class ImageWithTagsActivity extends AppCompatActivity {
 
 
 //        linearLayout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
-        for (int i = 0;getData() != null && i < getData().size(); i++) {
-
-            final TextView textView = new TextView(this);
-
-            textView.setTextColor(Color.WHITE);
-            textView.setTextSize(20);
-            textView.setPadding(10,0,10,0);
-            textView.setTag(i);
-            final int j = i;
-            textView.setText("#" + getData().get(i));
-
-
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    System.out.println(getData().get(j));
-                }
-            });
-
-            linearLayoutInHorizontal.addView(textView);
-        }
+        updateTags();
 
 
 //        if(tags.isEmpty()){
-//            titleTextView.setVisibility(View.INVISIBLE);
+//            title.setVisibility(View.INVISIBLE);
 //
 //        }
         Button addTagButton = (Button) findViewById(R.id.add_tag_button);
@@ -96,11 +78,77 @@ public class ImageWithTagsActivity extends AppCompatActivity {
         addTagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddTagActivity.class);
-                intent.putExtra("path", path);
-                startActivityForResult(intent, Constants.ADD_TAG_REQUEST_CODE);
+                callAddTag();
             }
         });
+    }
+
+    private void updateTags() {
+
+        linearLayoutInHorizontal.removeAllViews();
+
+        String imageTags = TagFileDb.getInstance(ImageWithTagsActivity.this).getTagsForFile(path);
+        if (imageTags.equals("")) {
+            return;
+        }
+        String[] splitTags = imageTags.split(",");
+        for (int i = 0; i<splitTags.length; i++) {
+
+            final TextView textView = new TextView(this);
+
+            textView.setTextColor(Color.WHITE);
+            textView.setTextSize(20);
+            textView.setPadding(10, 0, 10, 0);
+            textView.setText("#" + splitTags[i] + " ");
+
+            textView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), DeleteTagActivity.class);
+                    intent.putExtra("path", path);
+                    String tag = textView.getText().toString().replaceAll("#", "");
+                    tag = tag.replaceAll("\\s+", "");
+                    intent.putExtra("tagToDelete", tag);
+                    startActivityForResult(intent, Constants.DELETE_TAG_REQUEST_CODE);
+                    return true;
+                }
+            });
+
+            linearLayoutInHorizontal.addView(textView);
+        }
+    }
+
+    private void callAddTag() {
+        Intent intent = new Intent(getApplicationContext(), AddTagActivity.class);
+        intent.putExtra("path", path);
+        startActivityForResult(intent, Constants.ADD_TAG_REQUEST_CODE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_image, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case R.id.image_add_tags:
+                callAddTag();
+                break;
+            case R.id.image_delete_tags:
+//                TODO
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        updateTags();
+        return true;
     }
 
     @Override
@@ -119,6 +167,7 @@ public class ImageWithTagsActivity extends AppCompatActivity {
                 break;
 
             case Constants.DELETE_TAG_REQUEST_CODE:
+                db.deleteTags(path, data.getExtras().getString(Constants.KEY_DELETE_TAGS));
                 break;
 
             case Constants.UPDATE_TAG_REQUEST_CODE:
@@ -128,11 +177,9 @@ public class ImageWithTagsActivity extends AppCompatActivity {
                 break;
         }
 
+        updateTags();
+
 
     }
 
-    public ArrayList getData() {
-        final ArrayList tags = getIntent().getExtras().getStringArrayList("tags");
-        return tags;
-    }
 }

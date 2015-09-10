@@ -11,5 +11,8 @@ public class Constants {
     protected static final int UPDATE_TAG_REQUEST_CODE = 3;
 
     protected static final String KEY_ADD_TAGS = "tagsToAdd";
+    protected static final String KEY_DELETE_TAGS = "tagsToDelete";
+
+    protected static final String TAG_SEPARATOR = ",";
 
 }

@@ -32,7 +32,6 @@ public class TagFileDb extends SQLiteOpenHelper {
     private static final String SELECT_ALL = "SELECT * FROM " + TABLE_NAME;
     private static final int PATH_INDEX_DB = 1;
     private static final int TAGS_INDEX_DB = 2;
-    private static final String TAG_SEPARATOR = ",";
 
 
     public static synchronized TagFileDb getInstance (Context context) {
@@ -153,7 +152,7 @@ public class TagFileDb extends SQLiteOpenHelper {
 
         for (String file : files) {
             values.put(COL2, file); // Add the file path
-            values.put(COL3, ""); // Add empty tag
+            values.put(COL3, (String)null); // Add empty tag
             db.insert(TABLE_NAME, null, values); // Inserting row to db, getting the row id
         }
 
@@ -161,7 +160,7 @@ public class TagFileDb extends SQLiteOpenHelper {
 
 
     /**
-     * This method updates the tags for the file passed as a parameter from scratch
+     * This method adds tags to the file
      *
      * @param fileName - the file name
      * @param newTags - the tags for the file
@@ -178,9 +177,9 @@ public class TagFileDb extends SQLiteOpenHelper {
             updatedTags = newTags;
         }
         else {
-            ArrayList<String> arrayCurrentTags = new ArrayList(Arrays.asList(currentTags.split(TAG_SEPARATOR)));
+            ArrayList<String> arrayCurrentTags = new ArrayList(Arrays.asList(currentTags.split(Constants.TAG_SEPARATOR)));
 
-            String[] splitNewTags = newTags.split(TAG_SEPARATOR);
+            String[] splitNewTags = newTags.split(Constants.TAG_SEPARATOR);
 
             for (String newTag : splitNewTags) {
                 if (!arrayCurrentTags.contains(newTag)) {
@@ -188,9 +187,13 @@ public class TagFileDb extends SQLiteOpenHelper {
                 }
             }
 
-            updatedTags = arrayCurrentTags.toString().replaceAll(" ","");
+            updatedTags = arrayCurrentTags.toString();
+            updatedTags = updatedTags.replaceAll("\\s+", "");
+            updatedTags = updatedTags.replaceAll("\\[+","");
+            updatedTags = updatedTags.replaceAll("\\]+", "");
         }
 
+        updatedTags = updatedTags.replaceAll(",{2,}",Constants.TAG_SEPARATOR);
 
         ContentValues values = new ContentValues();
         values.put(COL2, fileName); // file name
@@ -201,6 +204,47 @@ public class TagFileDb extends SQLiteOpenHelper {
         return (rowsAffected == 1);
 
     }
+
+
+    /**
+     * This method deletes tags from the file
+     * @param fileName - the file name
+     * @param tagsToDelete - the tags to delete
+     * @return true if update went successfuly, false if there was a problem and more than one row
+     * was changed
+     */
+    public boolean deleteTags(String fileName, String tagsToDelete) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ArrayList<String> currentTags = new ArrayList(Arrays.asList(this.getTagsForFile(fileName).split(Constants.TAG_SEPARATOR)));
+
+        String[] splitTags = tagsToDelete.split(Constants.TAG_SEPARATOR);
+
+        int tagsDeleted = 0;
+
+        for (String tag : splitTags) {
+            if (currentTags.contains(tag)) {
+                currentTags.remove(tag);
+                tagsDeleted++;
+            }
+        }
+
+        String updatedTags = currentTags.toString().replaceAll("\\s+","");
+        updatedTags = updatedTags.replaceAll("\\s+", "");
+        updatedTags = updatedTags.replaceAll("\\[+","");
+        updatedTags = updatedTags.replaceAll("\\]+", "");
+
+        ContentValues values = new ContentValues();
+        values.put(COL2, fileName); // file name
+        values.put(COL3, updatedTags); // file tags
+
+        int rowsAffected = db.update(TABLE_NAME, values, (COL2 + " = ?"), new String[]{fileName});
+
+        return (tagsDeleted == splitTags.length);
+
+    }
+
+
 
 
     /**
@@ -236,8 +280,19 @@ public class TagFileDb extends SQLiteOpenHelper {
     public String[] getFilesWithTag(String[] tags) {
         SQLiteDatabase db = this.getReadableDatabase();
 
+        String placeHolders = "?"; // build the placeHolders for the rawQuery of SQLiteDatabase
+        for (int i=1; i<tags.length; i++) {
+            placeHolders = placeHolders.concat((" AND " + COL3 + " LIKE ?"));
+        }
+
         String sql = "SELECT * FROM " + TABLE_NAME +
-                " WHERE " + COL3 + " = ?";
+                " WHERE " + COL3 + " LIKE " + placeHolders;
+
+        // Remove whitespaces from tags
+        for (int i=0; i<tags.length; i++) {
+            tags[i] = tags[i].replaceAll("\\s+","");
+            tags[i] = "%" + tags[i] + "%";
+        }
 
         Cursor row = db.rawQuery(sql, tags);
 
